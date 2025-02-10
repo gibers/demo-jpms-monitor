@@ -20,6 +20,12 @@ echo " > creating monitor.observer"
 $JAVAC \
 	-d classes/monitor.observer \
 	$(find monitor.observer -name '*.java')
+
+javac -d classes/monitor.observer $(find monitor.observer -name '*.java')
+# Attention, avec la commande qui utilise le --module-source-path, il ne faut passer au paramètre "-d" que "classes" (et non pas classes/monitor.observer)
+javac -d classes --module-source-path './*/src/main/java' -m monitor.observer
+jar -cf mods/toto -C classes/monitor.observer .
+
 $JAR --create \
 	--file mods/monitor.observer.jar \
 	-C classes/monitor.observer .
@@ -29,6 +35,11 @@ $JAVAC \
 	--module-path mods \
 	-d classes/monitor.observer.alpha \
 	$(find monitor.observer.alpha -name '*.java')
+
+javac --module-path mods \
+	-d classes/monitor.observer.alpha \
+	$(find monitor.observer.alpha -name '*.java')
+
 $JAR --create \
 	--file mods/monitor.observer.alpha.jar \
 	-C classes/monitor.observer.alpha .
